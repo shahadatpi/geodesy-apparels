@@ -1,8 +1,8 @@
 import {initializeApp} from "firebase/app";
-import {getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, createUserWithEmailAndPassword} from 'firebase/auth';
+import {getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
 import {getFirestore, doc, getDoc, setDoc} from 'firebase/firestore';
 
-const firebaseConfig = {
+const geoFirebaseConfig = {
     apiKey: "AIzaSyCUskEUeKLYWBodVkoE7dr8n7zsYE5ibTo",
     authDomain: "geodesy-apparels.firebaseapp.com",
     projectId: "geodesy-apparels",
@@ -11,39 +11,58 @@ const firebaseConfig = {
     appId: "1:880169201292:web:4d61904d778cb55ff995a9"
 };
 
-// Initialize Firebase
-const geoApp = initializeApp(firebaseConfig);
+const geoFirebaseApp = initializeApp(geoFirebaseConfig);
 
-const geoProvider = new GoogleAuthProvider();
+const geoGoogleProvider = new GoogleAuthProvider();
 
-geoProvider.setCustomParameters({
-    prompt: "select_account"
+geoGoogleProvider.setCustomParameters({
+    prompt: 'select_account',
 });
 
-export const geoAuth = getAuth();
-export const geoSignInGooglePopup = ()=> signInWithPopup(geoAuth, geoProvider);
-export const geoSignInGoogleRedirect = ()=> signInWithRedirect(geoAuth, geoProvider);
+export const auth = getAuth();
+export const geoSignInWithGooglePopup = () =>
+    signInWithPopup(auth, geoGoogleProvider);
+export const signInWithGoogleRedirect = () =>
+    signInWithRedirect(auth, geoGoogleProvider);
+
 export const db = getFirestore();
- export const createUserDocFromAuth = async (userAuth)=>{
-      if (!userAuth) return ;
-      const userDocRef = doc(db, 'user', userAuth.uid);
-      const useSnapShot = await getDoc(userDocRef);
-      console.log(useSnapShot);
-      console.log(userDocRef);
 
-      if (!useSnapShot.exists()){
-          const {displayName, email} = userAuth;
-          const createAt = new Date();
-          try {
-              await setDoc(userDocRef, {displayName, email, createAt});
-          }catch (error){
-              console.log('error creating user', error.message);
-          }
-      }
-      return userDocRef;
- }
+export const geoCreateUserDocumentFromAuth = async (
+    userAuth,
+    additionalInformation = {}
+) => {
+    if (!userAuth) return;
 
- export const geoEmailPassUser = async (email, password)=> {
-     if (!email || !password) return;
-     return await createUserDocFromAuth(geoAuth, email, password);
- }
+    const userDocRef = doc(db, 'users', userAuth.uid);
+
+    const userSnapshot = await getDoc(userDocRef);
+
+    if (!userSnapshot.exists()) {
+        const { displayName, email } = userAuth;
+        const createdAt = new Date();
+
+        try {
+            await setDoc(userDocRef, {
+                displayName,
+                email,
+                createdAt,
+                ...additionalInformation,
+            });
+        } catch (error) {
+            console.log('error creating the user', error.message);
+        }
+    }
+
+    return userDocRef;
+};
+
+export const geoCreateAuthUserWithEmailAndPassword = async (email, password) => {
+    if (!email || !password) return;
+
+    return await createUserWithEmailAndPassword(auth, email, password);
+};
+export const geoSignInAuthUserWithEmailAndPassword = async (email, password) => {
+    if (!email || !password) return;
+
+    return await signInWithEmailAndPassword(auth, email, password);
+};

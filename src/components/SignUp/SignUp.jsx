@@ -1,5 +1,5 @@
 import { useState} from "react";
-import {geoEmailPassUser} from "../../utilities/Firebase/Firebase.js";
+import {geoCreateUserDocumentFromAuth, geoCreateAuthUserWithEmailAndPassword} from "../../utilities/Firebase/Firebase.js";
 import InputForm from "../InputForm/InputForm.jsx";
 import './SignUp.scss'
 import Button from "../Button/Button.jsx";
@@ -12,26 +12,42 @@ const defaultFormFields = {
 }
 const SignUp = () => {
     const [formFields, setFormFields] = useState(defaultFormFields);
-    const {displayName, email, password, confirmPassword} = formFields;
+    const { displayName, email, password, confirmPassword } = formFields;
 
-    const handleChange = (e)=>{
+    const resetFormFields = () => {
+        setFormFields(defaultFormFields);
+    };
 
-       const {name, value} = e.target
-        setFormFields({...formFields, [name]:value});
-    }
-    const handleSubmit = async (e)=>{
-         e.preventDefault();
-         if (password !== confirmPassword){
-             alert("Password does not match!");
-             return;
-         }
-         try {
-             const response = await geoEmailPassUser(email, password);
-             console.log(response)
-         }catch (error){
-             console.log(error);
-         }
-    }
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        if (password !== confirmPassword) {
+            alert('passwords do not match');
+            return;
+        }
+
+        try {
+            const { user } = await geoCreateAuthUserWithEmailAndPassword(
+                email,
+                password
+            );
+
+            await geoCreateUserDocumentFromAuth(user, { displayName });
+            resetFormFields();
+        } catch (error) {
+            if (error.code === 'auth/email-already-in-use') {
+                alert('Cannot create user, email already in use');
+            } else {
+                console.log('user creation encountered an error', error);
+            }
+        }
+    };
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+
+        setFormFields({ ...formFields, [name]: value });
+    };
     return (
         <div className='sign-up-container'>
             <h1>Don't have an account?</h1>
