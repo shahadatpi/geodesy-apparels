@@ -1,8 +1,9 @@
-import { useState} from "react";
+import { useState, useContext} from "react";
 import {geoCreateUserDocumentFromAuth, geoCreateAuthUserWithEmailAndPassword} from "../../utilities/Firebase/Firebase.js";
 import InputForm from "../InputForm/InputForm.jsx";
 import './SignUp.scss'
 import Button from "../Button/Button.jsx";
+import {UserContex} from "../../contex/UserContex.jsx";
 
 const defaultFormFields = {
     displayName: '',

@@ -3,6 +3,7 @@ import {geoCreateUserDocumentFromAuth, geoSignInWithGooglePopup, geoSignInAuthUs
 import InputForm from "../InputForm/InputForm.jsx";
 import './SignInForm.scss'
 import Button from "../Button/Button.jsx";
+import {UserContex} from "../../contex/UserContex.jsx";
 
 const defaultFormFields = {
     email: '',
@@ -11,12 +12,12 @@ const defaultFormFields = {
 const SignInForm = () => {
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { email, password} = formFields;
+
     const resetFormFields = () =>{
         setFormFields(defaultFormFields);
     }
     const logGoogleUser = async ()=>{
-        const {user} = await geoSignInWithGooglePopup();
-        await geoCreateUserDocumentFromAuth(user);
+        await geoSignInWithGooglePopup();
     }
 
     const handleChange = (e)=>{
@@ -28,9 +29,9 @@ const SignInForm = () => {
         e.preventDefault();
 
         try {
-            const response = await geoSignInAuthUserWithEmailAndPassword(email, password);
+            const {user} = await geoSignInAuthUserWithEmailAndPassword(email, password);
             resetFormFields();
-            console.log(response);
+
         }catch (error){
             switch (error.code) {
                 case 'auth/wrong-password':
