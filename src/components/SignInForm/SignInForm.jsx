@@ -2,7 +2,7 @@ import { useState} from "react";
 import {geoCreateUserDocumentFromAuth, geoSignInWithGooglePopup, geoSignInAuthUserWithEmailAndPassword} from "../../utilities/Firebase/Firebase.js";
 import InputForm from "../InputForm/InputForm.jsx";
 import './SignInForm.scss'
-import Button from "../Button/Button.jsx";
+import Button, {BUTTON_TYPE_CLASSES} from "../Button/Button.jsx";
 import {UserContex} from "../../contex/UserContex.jsx";
 
 const defaultFormFields = {
@@ -59,7 +59,7 @@ const SignInForm = () => {
                 <InputForm label="Password" type="password" onChange={handleChange} name="password" value={password} required/>
                  <div className='buttons-container'>
                      <Button type="submit">Sign In</Button>
-                     <Button type='button' buttonType='google' onClick={logGoogleUser} >Google Sign In</Button>
+                     <Button type='button' buttonType={BUTTON_TYPE_CLASSES.google} onClick={logGoogleUser} >Google Sign In</Button>
                  </div>
             </form>
         </div>

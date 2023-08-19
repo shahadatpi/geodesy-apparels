@@ -1,4 +1,4 @@
-{
+    {
   "name": "geodesy-apperals",
   "private": true,
   "version": "0.0.0",
@@ -16,6 +16,7 @@
     "react-router-dom": "^6.11.2",
     "react-scripts": "^5.0.1",
     "sass": "^1.62.1",
+    "styled-components": "^6.0.1",
     "vite-plugin-svgr": "^3.2.0"
   },
   "devDependencies": {
