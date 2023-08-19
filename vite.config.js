@@ -7,22 +7,7 @@ import svgr from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    laravel({
-      input: ['resources/js/app.js'],
-      refresh: true,
-    }),
-    i18n(),
-  ],
-
-  resolve: {
-    alias: {
-      vue: 'vue/dist/vue.esm-bundler.js',
-      ziggy: path.resolve('vendor/tightenco/ziggy/dist/vue.es.js'),
-
-    },
-  },
+  plugins: [svgr(), react()],
   build: {
     rollupOptions: {
       output:{
@@ -34,4 +19,4 @@ export default defineConfig({
       }
     }
   }
-});
+})
