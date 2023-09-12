@@ -1,5 +1,5 @@
 import { useState, useContext} from "react";
-import {geoCreateUserDocumentFromAuth, geoCreateAuthUserWithEmailAndPassword} from "../../utilities/Firebase/Firebase.js";
+import {geoCreateUserDocumentFromAuth, geoCreateAuthUserWithEmailAndPassword} from "../../Utilities/Firebase/Firebase.js";
 import InputForm from "../InputForm/InputForm.jsx";
 import './SignUp.scss'
 import Button from "../Button/Button.jsx";

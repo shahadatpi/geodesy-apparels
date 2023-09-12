@@ -1,5 +1,5 @@
 import { useState} from "react";
-import {geoCreateUserDocumentFromAuth, geoSignInWithGooglePopup, geoSignInAuthUserWithEmailAndPassword} from "../../utilities/Firebase/Firebase.js";
+import {geoCreateUserDocumentFromAuth, geoSignInWithGooglePopup, geoSignInAuthUserWithEmailAndPassword} from "../../Utilities/Firebase/Firebase.js";
 import InputForm from "../InputForm/InputForm.jsx";
 import './SignInForm.scss'
 import Button, {BUTTON_TYPE_CLASSES} from "../Button/Button.jsx";

@@ -1,5 +1,6 @@
 import {initializeApp} from "firebase/app";
-import {getAuth,
+import {
+    getAuth,
     GoogleAuthProvider,
     signInWithPopup,
     signInWithRedirect,
@@ -7,8 +8,9 @@ import {getAuth,
     signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged
-    } from 'firebase/auth';
-import {getFirestore,
+} from 'firebase/auth';
+import {
+    getFirestore,
     doc,
     getDoc,
     setDoc,
@@ -60,13 +62,8 @@ export const getCategoriesAndDocuments = async () => {
     const q = query(collectionRef);
 
     const querySnapshot = await getDocs(q);
-    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-        const { title, items } = docSnapshot.data();
-        acc[title.toLowerCase()] = items;
-        return acc;
-    }, {});
+    return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
 
-    return categoryMap;
 };
 
 export const geoCreateUserDocumentFromAuth = async (
@@ -80,7 +77,7 @@ export const geoCreateUserDocumentFromAuth = async (
     const userSnapshot = await getDoc(userDocRef);
 
     if (!userSnapshot.exists()) {
-        const { displayName, email } = userAuth;
+        const {displayName, email} = userAuth;
         const createdAt = new Date();
 
         try {
@@ -110,4 +107,4 @@ export const geoSignInAuthUserWithEmailAndPassword = async (email, password) => 
 };
 
 export const signOutUser = async () => await signOut(auth);
-export const onAuthStateChangedListener =  (callback) => onAuthStateChanged(auth, callback);
+export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback);
