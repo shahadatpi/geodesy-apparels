@@ -5,8 +5,7 @@ import SignInPage from "./Routes/SignInPage/SignInPage.jsx";
 import Shop from "./Routes/Shop/Shop.jsx";
 import Checkout from "./Routes/Checkout/Checkout.jsx";
 import {useEffect} from "react";
-import {geoCreateUserDocumentFromAuth, onAuthStateChangedListener} from "./Utilities/Firebase/Firebase.js";
-import {setCurrentUser} from "./Store/User/userAction.js";
+import {checkUserSession} from "./Store/User/userAction.js";
 import {useDispatch} from "react-redux";
 
 
@@ -15,13 +14,7 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const unSubscribe = onAuthStateChangedListener((user) => {
-            if (user) {
-                geoCreateUserDocumentFromAuth(user);
-            }
-            dispatch(setCurrentUser(user));
-        });
-        return unSubscribe;
+       dispatch(checkUserSession());
     }, [dispatch]);
 
     return (

@@ -1,9 +1,9 @@
-import { useState, useContext} from "react";
-import {geoCreateUserDocumentFromAuth, geoCreateAuthUserWithEmailAndPassword} from "../../Utilities/Firebase/Firebase.js";
+import { useState} from "react";
 import InputForm from "../InputForm/InputForm.jsx";
 import './SignUp.scss'
 import Button from "../Button/Button.jsx";
-import {UserContex} from "../../contex/UserContex.jsx";
+import {useDispatch} from "react-redux";
+import {signUpStart} from "../../Store/User/userAction.js";
 
 const defaultFormFields = {
     displayName: '',
@@ -14,6 +14,7 @@ const defaultFormFields = {
 const SignUp = () => {
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { displayName, email, password, confirmPassword } = formFields;
+    const dispatch = useDispatch();
 
     const resetFormFields = () => {
         setFormFields(defaultFormFields);
@@ -28,12 +29,7 @@ const SignUp = () => {
         }
 
         try {
-            const { user } = await geoCreateAuthUserWithEmailAndPassword(
-                email,
-                password
-            );
-
-            await geoCreateUserDocumentFromAuth(user, { displayName });
+            dispatch(signUpStart(email, password, displayName));
             resetFormFields();
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {

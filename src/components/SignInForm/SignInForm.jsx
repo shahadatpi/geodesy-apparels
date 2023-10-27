@@ -1,9 +1,9 @@
 import { useState} from "react";
-import {geoCreateUserDocumentFromAuth, geoSignInWithGooglePopup, geoSignInAuthUserWithEmailAndPassword} from "../../Utilities/Firebase/Firebase.js";
 import InputForm from "../InputForm/InputForm.jsx";
 import './SignInForm.scss'
 import Button, {BUTTON_TYPE_CLASSES} from "../Button/Button.jsx";
-import {UserContex} from "../../contex/UserContex.jsx";
+import {useDispatch} from "react-redux";
+import {emailSignInStart, googleSignIn} from "../../Store/User/userAction.js";
 
 const defaultFormFields = {
     email: '',
@@ -12,12 +12,13 @@ const defaultFormFields = {
 const SignInForm = () => {
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { email, password} = formFields;
+    const dispatch = useDispatch();
 
     const resetFormFields = () =>{
         setFormFields(defaultFormFields);
     }
     const logGoogleUser = async ()=>{
-        await geoSignInWithGooglePopup();
+        dispatch(googleSignIn());
     }
 
     const handleChange = (e)=>{
@@ -29,23 +30,13 @@ const SignInForm = () => {
         e.preventDefault();
 
         try {
-            const {user} = await geoSignInAuthUserWithEmailAndPassword(email, password);
+           dispatch(emailSignInStart(email, password));
             resetFormFields();
 
         }catch (error){
-            switch (error.code) {
-                case 'auth/wrong-password':
-                    alert('Incorrect password');
-                    break;
-                case 'auth/user-not-found':
-                    alert('This user does not exists!');
-                    break;
-                default:
-                    console.log(error);
-            }
+            console.log('User SignIn Error!', error);
         }
     }
-
 
     return (
         <div className='sign-in-form-container'>
